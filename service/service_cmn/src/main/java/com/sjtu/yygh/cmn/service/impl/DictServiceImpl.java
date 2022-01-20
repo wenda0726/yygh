@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -82,5 +83,29 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public String getName(String parentDictCode, String value) {
+        if(StringUtils.isEmpty(parentDictCode)){
+           QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
+           queryWrapper.eq("value",value);
+           Dict dict = baseMapper.selectOne(queryWrapper);
+           return dict == null ? "" : dict.getName();
+        }else{
+            Dict parentDict = this.getByDictCode(parentDictCode);
+            Long parentId = parentDict != null ? parentDict.getId() : -1;
+            QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("parent_id",parentId);
+            queryWrapper.eq("value",value);
+            Dict dict = baseMapper.selectOne(queryWrapper);
+            return dict == null ? "" : dict.getName();
+        }
+    }
+
+    private Dict getByDictCode(String dictCode){
+        QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("dict_code",dictCode);
+        return baseMapper.selectOne(queryWrapper);
     }
 }

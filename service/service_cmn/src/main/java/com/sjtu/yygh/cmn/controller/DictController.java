@@ -4,6 +4,7 @@ import com.sjtu.yygh.cmn.service.DictService;
 import com.sjtu.yygh.common.result.Result;
 import com.sjtu.yygh.model.cmn.Dict;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +45,25 @@ public class DictController {
         dictService.importData(file);
         return Result.ok();
     }
+
+    //根据dictcode 和 value值进行查询
+    @ApiOperation(value = "获取数据字典名称")
+    @GetMapping(value = "/getName/{parentDictCode}/{value}")
+    public Result getName(@PathVariable("parentDictCode") String parentDictCode,
+                          @PathVariable("value")String value){
+        String name = dictService.getName(parentDictCode,value);
+        return Result.ok(name);
+    }
+
+    //根据value值进行查询
+    @ApiOperation(value = "获取数据字典名称")
+    @GetMapping(value = "/getName/{value}")
+    public Result getName(@PathVariable("value")String value){
+        String name = dictService.getName("",value);
+        return Result.ok(name);
+    }
+
+
 
 
 }
