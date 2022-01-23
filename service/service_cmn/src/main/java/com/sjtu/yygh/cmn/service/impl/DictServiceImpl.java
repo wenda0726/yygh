@@ -85,6 +85,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     }
 
+    //根据parentDictCode 和 value查询
     @Override
     public String getName(String parentDictCode, String value) {
         if(StringUtils.isEmpty(parentDictCode)){
@@ -103,9 +104,21 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         }
     }
 
+    //根据dictCode查询下层节点
+    @Override
+    public List<Dict> findByDictCode(String dictCode) {
+        Dict dict = this.getByDictCode(dictCode);
+
+        return this.findChildData(dict.getId());
+    }
+
+    //根据dictCode查询Dict
     private Dict getByDictCode(String dictCode){
         QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("dict_code",dictCode);
         return baseMapper.selectOne(queryWrapper);
     }
+
+
+
 }

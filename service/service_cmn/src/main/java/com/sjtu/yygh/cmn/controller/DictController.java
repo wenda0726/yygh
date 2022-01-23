@@ -17,7 +17,7 @@ import java.util.List;
 @Api(tags = "数据字典接口")
 @RestController
 @RequestMapping("/admin/cmn/dict")
-@CrossOrigin
+//@CrossOrigin
 public class DictController {
 
     @Autowired
@@ -49,18 +49,25 @@ public class DictController {
     //根据dictcode 和 value值进行查询
     @ApiOperation(value = "获取数据字典名称")
     @GetMapping(value = "/getName/{parentDictCode}/{value}")
-    public Result getName(@PathVariable("parentDictCode") String parentDictCode,
+    public String getName(@PathVariable("parentDictCode") String parentDictCode,
                           @PathVariable("value")String value){
-        String name = dictService.getName(parentDictCode,value);
-        return Result.ok(name);
+
+        return dictService.getName(parentDictCode,value);
     }
 
     //根据value值进行查询
     @ApiOperation(value = "获取数据字典名称")
     @GetMapping(value = "/getName/{value}")
-    public Result getName(@PathVariable("value")String value){
-        String name = dictService.getName("",value);
-        return Result.ok(name);
+    public String getName(@PathVariable("value")String value){
+
+        return dictService.getName("",value);
+    }
+
+    @ApiOperation(value = "根据dictCode获取下级节点")
+    @GetMapping(value = "/findByDictCode/{dictCode}")
+    public Result<List<Dict>> findByDictCode(@PathVariable("dictCode")String dictCode){
+        List<Dict> list = dictService.findByDictCode(dictCode);
+        return Result.ok(list);
     }
 
 
