@@ -2,7 +2,6 @@ package com.sjtu.yygh.hosp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.sjtu.yygh.cmn.client.DictFeignClient;
-import com.sjtu.yygh.common.result.Result;
 import com.sjtu.yygh.hosp.repository.HospitalRepository;
 import com.sjtu.yygh.hosp.service.HospitalService;
 import com.sjtu.yygh.model.hosp.Hospital;
@@ -104,6 +103,18 @@ public class HospitalServiceImpl implements HospitalService {
     public List<Hospital> findByHosname(String hosname) {
         List<Hospital> list = hospitalRepository.findHospitalByHosnameLike(hosname);
         return list;
+    }
+
+    //根据医院编号查询详细的挂号规则
+    @Override
+    public Map<String, Object> getBookingRule(String hoscode) {
+        Hospital hospital = this.getByHoscode(hoscode);
+        this.setHospitalHosType(hospital);
+        Map<String,Object> map = new HashMap<>();
+        map.put("hospital",hospital);
+        map.put("bookingRule",hospital.getBookingRule());
+        hospital.setBookingRule(null);
+        return map;
     }
 
 

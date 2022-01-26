@@ -24,4 +24,6 @@ public interface HospitalService {
 
     List<Hospital> findByHosname(String hosname);
 
+    Map<String, Object> getBookingRule(String hoscode);
+
 }
