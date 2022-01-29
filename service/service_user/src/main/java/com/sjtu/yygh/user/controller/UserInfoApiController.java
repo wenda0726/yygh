@@ -25,6 +25,7 @@ public class UserInfoApiController {
     @PostMapping("login")
     public Result login(@RequestBody LoginVo loginVo){
         Map<String,Object> result = userInfoService.login(loginVo);
+
         return Result.ok(result);
     }
 }

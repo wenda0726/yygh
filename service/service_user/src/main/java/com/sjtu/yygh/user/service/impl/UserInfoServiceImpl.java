@@ -6,10 +6,13 @@ import com.sjtu.yygh.common.exception.YyghException;
 import com.sjtu.yygh.common.helper.JwtHelper;
 import com.sjtu.yygh.common.result.ResultCodeEnum;
 
+import com.sjtu.yygh.common.utils.CookieUtil;
 import com.sjtu.yygh.model.user.UserInfo;
 import com.sjtu.yygh.user.mapper.UserInfoMapper;
 import com.sjtu.yygh.user.service.UserInfoService;
 import com.sjtu.yygh.vo.user.LoginVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +23,9 @@ import java.util.Map;
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         implements UserInfoService {
 
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
+
     //用户登录接口
     @Override
     public Map<String, Object> login(LoginVo loginVo) {
@@ -28,6 +34,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         String code = loginVo.getCode();
         if(StringUtils.isEmpty(phone) || StringUtils.isEmpty(code)){
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);
+        }
+        //验证码核对
+        String redisCode = redisTemplate.opsForValue().get(phone);
+        if(!code.equals(redisCode)){
+            throw new YyghException(ResultCodeEnum.CODE_ERROR);
         }
         //根据手机号进行查询
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
@@ -57,6 +68,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         // token生成以及用户登录校验
         String token = JwtHelper.createToken(userInfo.getId(), name);
         resultMap.put("token",token);
+
+        
 
         return resultMap;
     }

@@ -4,6 +4,8 @@ package com.sjtu.yygh.msm.controller;
 import com.sjtu.yygh.common.result.Result;
 import com.sjtu.yygh.msm.service.MsmService;
 import com.sjtu.yygh.msm.utils.RandomUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
@@ -16,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/msm")
+@Api(tags = "短信发送管理")
 public class MsmApiController {
 
     @Autowired
@@ -24,6 +27,7 @@ public class MsmApiController {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
+    @ApiOperation("短信发送接口")
     @GetMapping("send/{phone}")
     public Result sendCode(@PathVariable String phone){
         //首先在redis中通过手机号进行获取验证码
