@@ -80,6 +80,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    public Department getDepartment(String hoscode, String depcode) {
+        return departmentRepository.getDepartmentByHoscodeAndDepcode(hoscode,depcode);
+    }
+
+    @Override
     public void save(Map<String, Object> parameterMap) {
         String jsonString = JSONObject.toJSONString(parameterMap);
         Department department = JSONObject.parseObject(jsonString, Department.class);

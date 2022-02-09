@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.sjtu.yygh.common.result.Result;
 import com.sjtu.yygh.hosp.service.DepartmentService;
 import com.sjtu.yygh.hosp.service.HospitalService;
+import com.sjtu.yygh.hosp.service.ScheduleService;
 import com.sjtu.yygh.model.hosp.Hospital;
+import com.sjtu.yygh.model.hosp.Schedule;
 import com.sjtu.yygh.vo.hosp.DepartmentVo;
 import com.sjtu.yygh.vo.hosp.HospitalQueryVo;
 import io.swagger.annotations.Api;
@@ -29,6 +31,9 @@ public class HospApiController {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @ApiOperation(value = "查询医院列表")
     @GetMapping("findHospList/{page}/{limit}")
@@ -57,6 +62,36 @@ public class HospApiController {
         Map<String,Object> map = hospitalService.getBookingRule(hoscode);
         return Result.ok(map);
     }
+
+    //根据医院编号、部门编号获取可预约的日期列表
+    @ApiOperation(value = "获取可预约排班日期列表")
+    @GetMapping("auth/getBookingScheduleRule/{page}/{limit}/{hoscode}/{depcode}")
+    public Result getBookingSchedule(@PathVariable Integer page,
+                                     @PathVariable Integer limit,
+                                     @PathVariable String hoscode,
+                                     @PathVariable String depcode){
+        Map<String,Object> map = scheduleService.getBookingScheduleRule(page,limit,hoscode,depcode);
+        return Result.ok(map);
+    }
+
+    @ApiOperation(value = "根据当前选择的日期，获取可以预约的排班数据")
+    @GetMapping("auth/findScheduleList/{hoscode}/{depcode}/{workDate}")
+    public Result findScheduleList(@PathVariable String hoscode,
+                                   @PathVariable String depcode,
+                                   @PathVariable String workDate){
+        List<Schedule> scheduleDetail = scheduleService.getScheduleDetail(hoscode, depcode, workDate);
+        return Result.ok(scheduleDetail);
+    }
+
+    @ApiOperation(value = "根据排班id获取排班数据")
+    @GetMapping("getSchedule/{scheduleId}")
+    public Result getSchedule(@PathVariable String scheduleId){
+        Schedule schedule = scheduleService.getById(scheduleId);
+        return Result.ok(schedule);
+    }
+
+
+
 
 
 }

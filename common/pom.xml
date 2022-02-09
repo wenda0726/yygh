@@ -61,6 +61,13 @@
             <version>${jodatime.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+
+
+
     </dependencies>
 
 
