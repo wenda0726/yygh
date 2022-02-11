@@ -7,8 +7,10 @@ import com.sjtu.yygh.common.utils.MD5;
 import com.sjtu.yygh.hosp.service.HospitalSetService;
 import com.sjtu.yygh.model.hosp.HospitalSet;
 import com.sjtu.yygh.vo.hosp.HospitalSetQueryVo;
+import com.sjtu.yygh.vo.hosp.ScheduleOrderVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -135,5 +137,7 @@ public class HospitalSetController {
         return Result.ok();
 
     }
+
+
 
 }
