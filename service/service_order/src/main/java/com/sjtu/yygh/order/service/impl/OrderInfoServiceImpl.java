@@ -24,18 +24,14 @@ import com.sjtu.yygh.order.mapper.OrderInfoMapper;
 import com.sjtu.yygh.order.service.OrderInfoService;
 import com.sjtu.yygh.user.client.PatientFeignClient;
 import com.sjtu.yygh.vo.hosp.ScheduleOrderVo;
-import com.sjtu.yygh.vo.order.OrderMqVo;
-import com.sjtu.yygh.vo.order.OrderQueryVo;
-import com.sjtu.yygh.vo.order.SignInfoVo;
+import com.sjtu.yygh.vo.order.*;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo>
@@ -300,6 +296,21 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
             rabbitService.sendMessage(MqConst.EXCHANGE_DIRECT_ORDER, MqConst.ROUTING_ORDER, orderMqVo);
         }
         return true;
+    }
+
+    @Override
+    public Map<String, Object> getCountMap(OrderCountQueryVo orderCountQueryVo) {
+        List<OrderCountVo> orderCountVoList = baseMapper.selectOrderCount(orderCountQueryVo);
+        List<String> dateList = new ArrayList<>();
+        List<Integer> countList = new ArrayList<>();
+        for(OrderCountVo vo : orderCountVoList){
+            dateList.add(vo.getReserveDate());
+            countList.add(vo.getCount());
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("dateList",dateList);
+        result.put("countList",countList);
+        return result;
     }
 
     private void packOrderInfo(OrderInfo orderInfo){

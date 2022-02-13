@@ -7,6 +7,7 @@ import com.sjtu.yygh.common.utils.AuthContextHolder;
 import com.sjtu.yygh.enums.OrderStatusEnum;
 import com.sjtu.yygh.model.order.OrderInfo;
 import com.sjtu.yygh.order.service.OrderInfoService;
+import com.sjtu.yygh.vo.order.OrderCountQueryVo;
 import com.sjtu.yygh.vo.order.OrderQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Api(tags = "订单接口")
 @RestController
@@ -65,7 +67,9 @@ public class OrderApiController {
         return Result.ok(isCancel);
     }
 
-
-
-
+    @ApiOperation(value = "获取订单统计数据")
+    @PostMapping("inner/getCountMap")
+    public Map<String,Object> getCountMap(@RequestBody OrderCountQueryVo orderCountQueryVo){
+        return orderInfoService.getCountMap(orderCountQueryVo);
+    }
 }

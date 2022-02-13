@@ -28,6 +28,11 @@
         </dependency>
         <dependency>
             <groupId>com.sjtu</groupId>
+            <artifactId>service_order_client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sjtu</groupId>
             <artifactId>rabbit_util</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
